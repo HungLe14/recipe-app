@@ -10,7 +10,6 @@ import { useRecipesContext } from "../store/context";
 export const FormInput = () => {
   const [imgValid, setImgValid] = useState(false);
   const [ingredient, setIngredient] = useState(false);
-  const [rowIngredient, setRowIngredient] = useState([]);
   const [listIngredient, setListIngredient] = useState([]);
   let urlValid;
   const navigate = useNavigate();
@@ -83,21 +82,13 @@ export const FormInput = () => {
   }, [enteredUrl]);
 
   const addIngredientHandler = () => {
-    const row = [...rowIngredient];
-    row.push("");
-    const newIngredient = [...row];
     setIngredient(true);
-    setRowIngredient(newIngredient);
+    const row = [...listIngredient];
+    row.push("");
+    setListIngredient([...row]);
   };
 
   const removeIngredientHandler = (index) => {
-    if (rowIngredient.length <= 1) {
-      setIngredient(false);
-    }
-    const row = [...rowIngredient];
-    row.pop();
-    setRowIngredient([...row]);
-
     const ingredients = [...listIngredient];
     ingredients.splice(index, 1);
     setListIngredient([...ingredients]);
@@ -236,14 +227,14 @@ export const FormInput = () => {
           </Form.Group>
         </Row>
         {ingredient &&
-          rowIngredient.map((_, index) => {
+          listIngredient.map((ingredient, index) => {
             return (
               <Row key={index} style={{ marginTop: "20px" }}>
                 <DisplayFlex>
                   <Form.Group className="col-md-5">
                     <Form.Control
                       type="text"
-                      // value={enteredIng}
+                      value={ingredient?.alias}
                       onChange={(event) => {
                         ingChangedHandler(event);
                         updateNameIngredient(event.target.value, index);
@@ -258,7 +249,7 @@ export const FormInput = () => {
                     <Form.Control
                       type="number"
                       min="1"
-                      // value={enteredNum}
+                      value={ingredient?.quantity}
                       onChange={(event) => {
                         numChangedHandler(event);
                         updateNumIngredient(event.target.value, index);
@@ -286,7 +277,11 @@ export const FormInput = () => {
       </Form>
       <Row style={{ marginTop: "20px" }}>
         <Form.Group className="col-md-4">
-          <Btn type="click" isSuccess={true} onAddRecipe={addIngredientHandler}>
+          <Btn
+            submitting={false}
+            isSuccess={true}
+            onAddRecipe={addIngredientHandler}
+          >
             Add ingredient
           </Btn>
         </Form.Group>

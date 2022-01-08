@@ -25,15 +25,16 @@ export const Btn = ({
 }) => {
   return (
     <BtnAll
-      type={submitting ? "submit" : "click"}
+      type={submitting ? "submit" : "button"}
       isSuccess={isSuccess}
       onClick={() => {
         if (onRemoveRecipe) {
+          console.log(orderNumber);
           onRemoveRecipe(orderNumber);
         }
 
         if (onAddRecipe) {
-          onAddRecipe(orderNumber);
+          onAddRecipe();
         }
 
         if (onCancel) {
