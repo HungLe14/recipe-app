@@ -7,7 +7,7 @@ export const recipesContext = React.createContext({
 
 export const RecipesProvider = ({ children }) => {
   const [recipes, setRecipes] = useState([]);
-
+  console.log(recipes);
   return (
     <recipesContext.Provider
       value={{

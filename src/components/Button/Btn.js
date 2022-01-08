@@ -15,18 +15,27 @@ const BtnAll = styled.button`
 
 export const Btn = ({
   children,
+  submitting,
   isSuccess,
-  onRecipe,
+  onRemoveRecipe,
+  onAddRecipe,
   isDisabled,
   onCancel,
+  orderNumber,
 }) => {
   return (
     <BtnAll
+      type={submitting ? "submit" : "click"}
       isSuccess={isSuccess}
       onClick={() => {
-        if (onRecipe) {
-          onRecipe();
+        if (onRemoveRecipe) {
+          onRemoveRecipe(orderNumber);
         }
+
+        if (onAddRecipe) {
+          onAddRecipe(orderNumber);
+        }
+
         if (onCancel) {
           onCancel();
         }

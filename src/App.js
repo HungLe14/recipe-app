@@ -38,9 +38,11 @@ function App() {
                       </Link>
                       {recipesCtx.recipe.map((element, index) => {
                         return (
-                          <FlexColumnStart style={{ marginTop: "20px" }}>
+                          <FlexColumnStart
+                            key={index}
+                            style={{ marginTop: "20px" }}
+                          >
                             <div
-                              key={index}
                               style={{
                                 border: "1px solid #ccc",
                                 width: "80%",

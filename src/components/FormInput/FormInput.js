@@ -83,34 +83,42 @@ export const FormInput = () => {
   }, [enteredUrl]);
 
   const addIngredientHandler = () => {
-    rowIngredient.push("");
-    const newIngredient = [...rowIngredient];
+    const row = [...rowIngredient];
+    row.push("");
+    const newIngredient = [...row];
     setIngredient(true);
     setRowIngredient(newIngredient);
   };
 
-  const removeIngredientHandler = () => {
+  const removeIngredientHandler = (index) => {
     if (rowIngredient.length <= 1) {
       setIngredient(false);
     }
-    rowIngredient.pop();
-    setRowIngredient([...rowIngredient]);
+    const row = [...rowIngredient];
+    row.pop();
+    setRowIngredient([...row]);
+
+    const ingredients = [...listIngredient];
+    ingredients.splice(index, 1);
+    setListIngredient([...ingredients]);
   };
 
   const updateNameIngredient = (nameIng, index) => {
-    listIngredient[index] = {
+    const newIngredient = [...listIngredient];
+    newIngredient[index] = {
       alias: nameIng,
       quantity: listIngredient[index]?.quantity,
     };
-    setListIngredient([...listIngredient]);
+    setListIngredient([...newIngredient]);
   };
 
   const updateNumIngredient = (number, index) => {
-    listIngredient[index] = {
+    const newIngredient = [...listIngredient];
+    newIngredient[index] = {
       alias: listIngredient[index]?.alias,
       quantity: number,
     };
-    setListIngredient([...listIngredient]);
+    setListIngredient([...newIngredient]);
   };
 
   const submitHandler = () => {
@@ -129,7 +137,7 @@ export const FormInput = () => {
       name: enteredName,
       url: enteredUrl,
       description: enteredDes,
-      ingredient: [...listIngredient],
+      ingredients: [...listIngredient],
     });
     recipesCtx.setRecipe([...arrRecipes]);
 
@@ -157,7 +165,7 @@ export const FormInput = () => {
         <Row>
           <div>
             <Btn
-              type="submit"
+              submitting={true}
               isSuccess={true}
               isDisabled={
                 !enteredNameIsValid ||
@@ -263,9 +271,10 @@ export const FormInput = () => {
                   </Form.Group>
                   <Form.Group className="col-md-5">
                     <Btn
-                      type="click"
+                      submitting={false}
                       isSuccess={false}
-                      onRecipe={removeIngredientHandler}
+                      orderNumber={index}
+                      onRemoveRecipe={removeIngredientHandler}
                     >
                       X
                     </Btn>
@@ -277,7 +286,7 @@ export const FormInput = () => {
       </Form>
       <Row style={{ marginTop: "20px" }}>
         <Form.Group className="col-md-4">
-          <Btn type="click" isSuccess={true} onRecipe={addIngredientHandler}>
+          <Btn type="click" isSuccess={true} onAddRecipe={addIngredientHandler}>
             Add ingredient
           </Btn>
         </Form.Group>
