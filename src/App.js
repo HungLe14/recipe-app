@@ -46,7 +46,7 @@ function App() {
                                 width: "80%",
                               }}
                             >
-                              <ItemRecipe onClick={setDetailRecipe(true)}>
+                              <ItemRecipe onClick={() => setDetailRecipe(true)}>
                                 <FlexColumnStart>
                                   <h3>{element.name}</h3>
                                   <p>{element.description}</p>

@@ -10,6 +10,7 @@ import { useRecipesContext } from "../store/context";
 export const FormInput = () => {
   const [imgValid, setImgValid] = useState(false);
   const [ingredient, setIngredient] = useState(false);
+  const [rowIngredient, setRowIngredient] = useState([]);
   const [listIngredient, setListIngredient] = useState([]);
   let urlValid;
   const navigate = useNavigate();
@@ -62,14 +63,12 @@ export const FormInput = () => {
 
   const checkUrlValid = () => {
     if (enteredUrl !== urlValid) {
-      console.log("checked");
       setImgValid(false);
     }
   };
 
   const fetchURL = async (url) => {
     if (url) {
-      console.log("fetched");
       const res = await fetch(url);
       if (res.ok) {
         urlValid = url;
@@ -83,18 +82,34 @@ export const FormInput = () => {
     checkUrlValid();
   }, [enteredUrl]);
 
-  const addRecipeHandler = () => {
-    listIngredient.push("");
-    const newIngredient = [...listIngredient];
+  const addIngredientHandler = () => {
+    rowIngredient.push("");
+    const newIngredient = [...rowIngredient];
     setIngredient(true);
-    setListIngredient(newIngredient);
+    setRowIngredient(newIngredient);
   };
 
-  const removeRecipeHandler = () => {
-    if (listIngredient.length <= 1) {
+  const removeIngredientHandler = () => {
+    if (rowIngredient.length <= 1) {
       setIngredient(false);
     }
-    listIngredient.pop();
+    rowIngredient.pop();
+    setRowIngredient([...rowIngredient]);
+  };
+
+  const updateNameIngredient = (nameIng, index) => {
+    listIngredient[index] = {
+      alias: nameIng,
+      quantity: listIngredient[index]?.quantity,
+    };
+    setListIngredient([...listIngredient]);
+  };
+
+  const updateNumIngredient = (number, index) => {
+    listIngredient[index] = {
+      alias: listIngredient[index]?.alias,
+      quantity: number,
+    };
     setListIngredient([...listIngredient]);
   };
 
@@ -114,10 +129,7 @@ export const FormInput = () => {
       name: enteredName,
       url: enteredUrl,
       description: enteredDes,
-      ingredient: {
-        alias: enteredIng,
-        quantity: enteredNum,
-      },
+      ingredient: [...listIngredient],
     });
     recipesCtx.setRecipe([...arrRecipes]);
 
@@ -126,6 +138,7 @@ export const FormInput = () => {
     resetDesInput();
     resetIngInput();
     resetNumInput();
+    setIngredient(false);
     navigate("/recipes");
   };
 
@@ -215,15 +228,18 @@ export const FormInput = () => {
           </Form.Group>
         </Row>
         {ingredient &&
-          listIngredient.map((ingredient, index) => {
+          rowIngredient.map((_, index) => {
             return (
               <Row key={index} style={{ marginTop: "20px" }}>
                 <DisplayFlex>
                   <Form.Group className="col-md-5">
                     <Form.Control
                       type="text"
-                      value={enteredIng}
-                      onChange={ingChangedHandler}
+                      // value={enteredIng}
+                      onChange={(event) => {
+                        ingChangedHandler(event);
+                        updateNameIngredient(event.target.value, index);
+                      }}
                       onBlur={ingBlurHandler}
                       style={{
                         border: ingInputHasError ? "1px solid red" : "",
@@ -234,8 +250,11 @@ export const FormInput = () => {
                     <Form.Control
                       type="number"
                       min="1"
-                      value={enteredNum}
-                      onChange={numChangedHandler}
+                      // value={enteredNum}
+                      onChange={(event) => {
+                        numChangedHandler(event);
+                        updateNumIngredient(event.target.value, index);
+                      }}
                       onBlur={numBlurHandler}
                       style={{
                         border: numInputHasError ? "1px solid red" : "",
@@ -246,7 +265,7 @@ export const FormInput = () => {
                     <Btn
                       type="click"
                       isSuccess={false}
-                      onRecipe={removeRecipeHandler}
+                      onRecipe={removeIngredientHandler}
                     >
                       X
                     </Btn>
@@ -258,7 +277,7 @@ export const FormInput = () => {
       </Form>
       <Row style={{ marginTop: "20px" }}>
         <Form.Group className="col-md-4">
-          <Btn type="click" isSuccess={true} onRecipe={addRecipeHandler}>
+          <Btn type="click" isSuccess={true} onRecipe={addIngredientHandler}>
             Add ingredient
           </Btn>
         </Form.Group>
