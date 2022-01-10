@@ -83,9 +83,9 @@ export const FormInput = () => {
 
   const addIngredientHandler = () => {
     setIngredient(true);
-    const row = [...listIngredient];
-    row.push("");
-    setListIngredient([...row]);
+    const ingredients = [...listIngredient];
+    ingredients.push("");
+    setListIngredient([...ingredients]);
   };
 
   const removeIngredientHandler = (index) => {

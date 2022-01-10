@@ -12,6 +12,7 @@ import { Row } from "react-bootstrap";
 import { Navigate, Outlet, Route, Routes, Link } from "react-router-dom";
 import React, { useState } from "react";
 import { useRecipesContext } from "./components/store/context";
+import { DetailItem } from "./DetailItem/DetailItem";
 
 function App() {
   const recipesCtx = useRecipesContext();
@@ -28,7 +29,7 @@ function App() {
             path="/recipes"
             element={
               <BodyWrapper>
-                <Row style={{ width: "100%" }}>
+                <Row style={{ width: "100%", margin: "0" }}>
                   <div className="col-md-6">
                     <MarginLeft60>
                       <Link to="form">
@@ -48,12 +49,17 @@ function App() {
                                 width: "80%",
                               }}
                             >
-                              <ItemRecipe onClick={() => setDetailRecipe(true)}>
+                              <ItemRecipe
+                                onClick={() => {
+                                  setDetailRecipe(true);
+                                  recipesCtx.setNumber(index);
+                                }}
+                              >
                                 <FlexColumnStart>
                                   <h3>{element.name}</h3>
                                   <p>{element.description}</p>
                                 </FlexColumnStart>
-                                <PreviewImg style={{ marginLeft: "auto" }}>
+                                <PreviewImg>
                                   <img
                                     alt="Preview"
                                     src="NYC-Pizza-Hanoi-NYC-Pizza-Hanoi-1-1024x1024.jpeg"
@@ -80,11 +86,13 @@ function App() {
                 </div>
               }
             />
+
             <Route
               path=""
               element={
                 <div className="col-md-6">
-                  <h2>Please select a Recipe!</h2>
+                  {!detailRecipe && <h2>Please select a Recipe!</h2>}
+                  {detailRecipe && <DetailItem />}
                 </div>
               }
             />
