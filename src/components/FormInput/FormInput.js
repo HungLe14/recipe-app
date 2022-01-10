@@ -138,10 +138,12 @@ export const FormInput = () => {
     resetIngInput();
     resetNumInput();
     setIngredient(false);
+    recipesCtx.setIsEditting(false);
     navigate("/recipes");
   };
 
   const cancelHandler = () => {
+    recipesCtx.setIsEditting(false);
     navigate("/recipes");
   };
 
@@ -180,7 +182,11 @@ export const FormInput = () => {
             <Form.Control
               type="text"
               id="name"
-              value={enteredName}
+              value={
+                recipesCtx.isEditting
+                  ? recipesCtx.recipe[recipesCtx.number].name
+                  : enteredName
+              }
               onChange={nameChangedHandler}
               onBlur={nameBlurHandler}
               style={{ border: nameInputHasError ? "1px solid red" : "" }}
@@ -196,7 +202,11 @@ export const FormInput = () => {
             <Form.Control
               type="url"
               id="image"
-              value={enteredUrl}
+              value={
+                recipesCtx.isEditting
+                  ? recipesCtx.recipe[recipesCtx.number].url
+                  : enteredUrl
+              }
               onChange={urlChangedHandler}
               onBlur={urlBlurHandler}
               style={{ border: urlInputHasError ? "1px solid red" : "" }}
@@ -211,7 +221,11 @@ export const FormInput = () => {
             <Form.Control
               as="textarea"
               id="discription"
-              value={enteredDes}
+              value={
+                recipesCtx.isEditting
+                  ? recipesCtx.recipe[recipesCtx.number].description
+                  : enteredDes
+              }
               onChange={desChangedHandler}
               onBlur={desBlurHandler}
               style={{
@@ -234,7 +248,7 @@ export const FormInput = () => {
                   <Form.Group className="col-md-5">
                     <Form.Control
                       type="text"
-                      value={ingredient?.alias}
+                      value={ingredient.alias}
                       onChange={(event) => {
                         ingChangedHandler(event);
                         updateNameIngredient(event.target.value, index);
@@ -249,7 +263,7 @@ export const FormInput = () => {
                     <Form.Control
                       type="number"
                       min="1"
-                      value={ingredient?.quantity}
+                      value={ingredient.quantity}
                       onChange={(event) => {
                         numChangedHandler(event);
                         updateNumIngredient(event.target.value, index);

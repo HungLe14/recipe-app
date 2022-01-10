@@ -16,7 +16,7 @@ import { DetailItem } from "./DetailItem/DetailItem";
 
 function App() {
   const recipesCtx = useRecipesContext();
-  const [detailRecipe, setDetailRecipe] = useState(false);
+
   return (
     <div className="App">
       <header>
@@ -33,9 +33,7 @@ function App() {
                   <div className="col-md-6">
                     <MarginLeft60>
                       <Link to="form">
-                        <Btn isFloat={true} isSuccess={true}>
-                          New Recipe
-                        </Btn>
+                        <Btn isSuccess={true}>New Recipe</Btn>
                       </Link>
                       {recipesCtx.recipe.map((element, index) => {
                         return (
@@ -51,7 +49,7 @@ function App() {
                             >
                               <ItemRecipe
                                 onClick={() => {
-                                  setDetailRecipe(true);
+                                  recipesCtx.setDetailShowing(true);
                                   recipesCtx.setNumber(index);
                                 }}
                               >
@@ -91,8 +89,10 @@ function App() {
               path=""
               element={
                 <div className="col-md-6">
-                  {!detailRecipe && <h2>Please select a Recipe!</h2>}
-                  {detailRecipe && <DetailItem />}
+                  {!recipesCtx.detailShowing && (
+                    <h2>Please select a Recipe!</h2>
+                  )}
+                  {recipesCtx.detailShowing && <DetailItem />}
                 </div>
               }
             />
